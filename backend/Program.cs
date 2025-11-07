@@ -15,7 +15,6 @@ builder.Services.AddSwaggerGen();
 // SelfApi base URL'i ENV'den al, yoksa config, yoksa local
 var selfBaseUrl =
     Environment.GetEnvironmentVariable("SELF_BASE_URL") ??
-    "https://aiemotionproject.onrender.com/" ??
     builder.Configuration["Self:BaseUrl"] ??
     "https://localhost:7104/";
 
