@@ -8,99 +8,91 @@ using System.Text;
 namespace backend.Controllers
 {
     [ApiController]
-[Route("api/[controller]")]
-public class SyncAnalyzeController : ControllerBase
-{
-    private readonly IHttpClientFactory _http;
-    private readonly AppDbContext _db;
-
-    public SyncAnalyzeController(IHttpClientFactory http, AppDbContext db)
+    [Route("api/[controller]")]
+    public class SyncAnalyzeController : ControllerBase
     {
-        _http = http;
-        _db = db;
-    }
+        private readonly IHttpClientFactory _httpFactory;
+        private readonly AppDbContext _db;
 
-    public class SyncAnalyzeRequest { public string Username { get; set; } public string Text { get; set; } }
-
-    [HttpPost]
-    public async Task<IActionResult> Post([FromBody] SyncAnalyzeRequest req)
-    {
-        if (string.IsNullOrWhiteSpace(req?.Username) || string.IsNullOrWhiteSpace(req?.Text))
-            return BadRequest("username ve text zorunludur.");
-
-        var client = _http.CreateClient("SelfApi");
-
-        // ENV okunmadıysa isteğin geldiği hostu kullan
-        if (client.BaseAddress == null || string.IsNullOrWhiteSpace(client.BaseAddress.ToString()))
+        public SyncAnalyzeController(IHttpClientFactory httpFactory, AppDbContext db)
         {
-            var inferred = $"{Request.Scheme}://{Request.Host.Value}/";
-            client.BaseAddress = new Uri(inferred);
+            _httpFactory = httpFactory;
+            _db = db;
         }
 
-        var payload = new { username = req.Username, text = req.Text };
-        var json = JsonConvert.SerializeObject(payload);
-        using var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-        HttpResponseMessage resp;
-        string body = null;
-        try
+        public class SyncAnalyzeRequest
         {
-            // EmotionController'a iç POST
-            resp = await client.PostAsync("api/emotion/analyze", content);
-            body = await resp.Content.ReadAsStringAsync();
+            public string Username { get; set; }
+            public string Text { get; set; }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] SyncAnalyzeRequest req)
+        {
+            if (string.IsNullOrWhiteSpace(req?.Username) || string.IsNullOrWhiteSpace(req?.Text))
+                return BadRequest("username ve text zorunludur.");
+
+            var client = _httpFactory.CreateClient("SelfApi");
+
+            // 1) EmotionController'a POST (Değiştirmiyoruz!)
+            var payload = new { username = req.Username, text = req.Text };
+            var json = JsonConvert.SerializeObject(payload);
+            using var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Not: EmotionController route'unu kendi projene göre ayarla
+            var resp = await client.PostAsync("api/emotion/analyze", content);
+            var body = await resp.Content.ReadAsStringAsync();
+
             if (!resp.IsSuccessStatusCode)
             {
-                return StatusCode((int)resp.StatusCode, new {
-                    error = "EmotionController yanıtı başarısız",
+                return StatusCode((int)resp.StatusCode, new
+                {
+                    error = "EmotionController yanıtı başarısız.",
                     status = resp.StatusCode.ToString(),
-                    baseAddress = client.BaseAddress?.ToString(),
-                    preview = body?.Length > 200 ? body[..200] : body
+                    preview = body?.Length > 200 ? body.Substring(0, 200) : body
                 });
             }
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(502, new {
-                error = "Self API çağrısı başarısız",
-                detail = ex.Message,
-                baseAddress = client.BaseAddress?.ToString()
+
+            // 2) Dönen yanıttan label/score çıkar
+            string label;
+            double score;
+            try
+            {
+                (label, score) = EmotionParser.ParseLabelScore(body);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new
+                {
+                    error = "Yanıt ayrıştırılamadı.",
+                    detail = ex.Message,
+                    preview = body?.Length > 200 ? body.Substring(0, 200) : body
+                });
+            }
+
+            // 3) Veritabanına kaydet
+            var record = new EmotionRecord
+            {
+                Username = req.Username,
+                Text = req.Text,
+                Label = label,
+                Score = score,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _db.EmotionRecords.Add(record);
+            await _db.SaveChangesAsync();
+
+            // 4) Sonucu döndür
+            return Ok(new
+            {
+                message = "Senkron analiz kaydedildi.",
+                username = record.Username,
+                text = record.Text,
+                label = record.Label,
+                score = record.Score,
+                createdAt = record.CreatedAt
             });
         }
-
-        // SSE/JSON ayrıştır
-        string label; double score;
-        try
-        {
-            (label, score) = EmotionParser.ParseLabelScore(body);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new {
-                error = "Yanıt ayrıştırılamadı",
-                detail = ex.Message,
-                preview = body?.Length > 300 ? body[..300] : body
-            });
-        }
-
-        // DB'ye yaz
-        var rec = new EmotionRecord {
-            Username = req.Username,
-            Text = req.Text,
-            Label = label,
-            Score = score,
-            CreatedAt = DateTime.UtcNow
-        };
-        _db.EmotionRecords.Add(rec);
-        await _db.SaveChangesAsync();
-
-        return Ok(new {
-            message = "Senkron analiz kaydedildi.",
-            username = rec.Username,
-            text = rec.Text,
-            label = rec.Label,
-            score = rec.Score,
-            createdAt = rec.CreatedAt
-        });
     }
-}
 }
