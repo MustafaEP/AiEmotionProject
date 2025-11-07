@@ -15,7 +15,8 @@ builder.Services.AddHttpClient<EmotionService>();
 builder.Services.AddControllers();
 builder.Services.AddMemoryCache();
 
-
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 
 builder.Services.AddHttpClient<EmotionService>(client =>
@@ -55,6 +56,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Swagger'ı her ortamda aç
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "AI Emotion API v1");
+    c.RoutePrefix = "swagger"; 
+});
+
+
 app.UseCors();
 
 app.UseHttpsRedirection();
