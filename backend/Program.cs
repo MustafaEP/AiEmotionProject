@@ -1,6 +1,7 @@
 using backend;
 using backend.Data;
 using backend.Services;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,7 +18,6 @@ builder.Services.AddMemoryCache();
 
 
 
-
 builder.Services.AddHttpClient<EmotionService>(client =>
 {
     client.Timeout = TimeSpan.FromSeconds(30);
@@ -28,21 +28,20 @@ builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
     p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
 ));
 
-var selfBaseUrl = Environment.GetEnvironmentVariable("SELF_BASE_URL")
-                  ?? builder.Configuration["Self:BaseUrl"]
-                  ?? "https://aiemotionproject.onrender.com/" // Render i�in. Normal durumda silinmeli
-                  ?? "https://localhost:7104/";
+// Render.com gibi reverse proxy'ler için ForwardedHeaders yapılandırması
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
 
-builder.Services.AddHttpClient("SelfApi", c => c.BaseAddress = new Uri(selfBaseUrl));
+// SelfApi HttpClient'ı runtime'da base URL ile yapılandırılacak
+// SyncAnalyzeController'da request'in base URL'i kullanılacak
+builder.Services.AddHttpClient("SelfApi");
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-
-builder.Services.AddHttpClient("SelfApi", client =>
-{
-    client.BaseAddress = new Uri(selfBaseUrl);
-});
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=emotiondata.db"));
@@ -53,6 +52,9 @@ if (!string.IsNullOrWhiteSpace(port)) builder.WebHost.UseUrls($"http://0.0.0.0:{
 
 
 var app = builder.Build();
+
+// Render.com gibi reverse proxy'ler için ForwardedHeaders middleware'i
+app.UseForwardedHeaders();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
