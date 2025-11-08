@@ -32,10 +32,7 @@ namespace backend.Controllers
             if (string.IsNullOrWhiteSpace(req?.Username) || string.IsNullOrWhiteSpace(req?.Text))
                 return BadRequest("username ve text zorunludur.");
 
-            // Base URL'i dinamik olarak al (Render.com veya localhost için otomatik çalışır)
-            var baseUrl = $"{Request.Scheme}://{Request.Host}";
             var client = _httpFactory.CreateClient("SelfApi");
-            client.BaseAddress = new Uri(baseUrl);
 
             // 1) EmotionController'a POST (Değiştirmiyoruz!)
             var payload = new { username = req.Username, text = req.Text };
