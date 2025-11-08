@@ -5,31 +5,26 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// --- CORS / Controllers / Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMemoryCache();
 
-// --- HTTP Clients
 builder.Services.AddHttpClient<EmotionService>(c =>
 {
     c.Timeout = TimeSpan.FromSeconds(30);
-    // c.BaseAddress = new Uri("https://mustafaep-emotion-analyzer.hf.space/");
 });
 
-// --- Self API base url (env > appsettings > fallback)
 var selfBaseUrl = Environment.GetEnvironmentVariable("SELF_BASE_URL")
                   ?? builder.Configuration["Self:BaseUrl"]
-                  ?? "https://aiemotionproject.onrender.com/"; // Render için fallback
+                  ?? "https://aiemotionproject.onrender.com/"; // Render iï¿½in fallback
 builder.Services.AddHttpClient("SelfApi", c => c.BaseAddress = new Uri(selfBaseUrl));
 
-// --- CORS
 builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
     p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
 ));
 
-// --- DB: SQLite dosyasýný /var/data’ya yaz
+// --- DB: SQLite dosyasï¿½nï¿½ /var/dataï¿½ya yaz
 var env = builder.Environment;
 string dbPath;
 if (env.IsDevelopment())
@@ -38,27 +33,25 @@ if (env.IsDevelopment())
 }
 else
 {
-    // Render'da Persistent Disk'i /var/data olarak mount ettik
     Directory.CreateDirectory("/var/data");
     dbPath = Path.Combine("/var/data", "emotiondata.db");
 }
 builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseSqlite($"Data Source={dbPath}"));
 
-// --- Render PORT
 var port = Environment.GetEnvironmentVariable("PORT");
 if (!string.IsNullOrWhiteSpace(port))
     builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
 var app = builder.Build();
 
-// --- Proxy/HTTPS head’leri (Render SSL terminasyonu)
+// --- Proxy/HTTPS headï¿½leri (Render SSL terminasyonu)
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedFor
 });
 
-// --- Swagger (prod’da da açýk kalsýn)
+// --- Swagger (prodï¿½da da aï¿½ï¿½k kalsï¿½n)
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -72,7 +65,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// --- EF Migration’larý otomatik uygula
+// --- EF Migrationï¿½larï¿½ otomatik uygula
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();

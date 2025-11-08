@@ -1,6 +1,5 @@
 ﻿using backend.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -13,8 +12,6 @@ namespace backend.Controllers
         private readonly AppDbContext _db;
         public EmotionRecordsController(AppDbContext db) => _db = db;
 
-        // --- READ: Listeleme (filtre + sayfalama) ---
-        // GET: /api/emotionrecords?username=erhan&label=negative&page=1&pageSize=20
         [HttpGet]
         public async Task<IActionResult> GetAll(
             [FromQuery] string? username,
@@ -58,8 +55,6 @@ namespace backend.Controllers
             });
         }
 
-        // --- READ: Tek kayıt ---
-        // GET: /api/emotionrecords/5
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
@@ -73,11 +68,9 @@ namespace backend.Controllers
             public string? Username { get; set; }
             public string? Text { get; set; }
             public string? Label { get; set; }
-            public double? Score { get; set; } // 0-1 arası
+            public double? Score { get; set; }
         }
 
-        // --- DELETE: Tek kayıt sil ---
-        // DELETE: /api/emotionrecords/5
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {

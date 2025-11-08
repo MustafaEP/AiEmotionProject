@@ -13,7 +13,6 @@ function App() {
   const [result, setResult] = useState(null)
   const [error, setError] = useState(null)
   
-  // History modal states
   const [showHistory, setShowHistory] = useState(false)
   const [historyLoading, setHistoryLoading] = useState(false)
   const [historyData, setHistoryData] = useState(null)
@@ -157,7 +156,6 @@ function App() {
     }))
   }
 
-  // Fetch history when filters change
   useEffect(() => {
     if (showHistory) {
       fetchHistory()

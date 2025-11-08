@@ -1,5 +1,54 @@
+# Build outputs
 bin/
 obj/
 out/
+build/
+dist/
+
+# Database files
 *.db
 *.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
+
+# Mobile
+*.apk
+*.aab
+*.ipa
+android/app/build/
+ios/build/

@@ -34,12 +34,10 @@ namespace backend.Controllers
 
             var client = _httpFactory.CreateClient("SelfApi");
 
-            // 1) EmotionController'a POST (Değiştirmiyoruz!)
             var payload = new { username = req.Username, text = req.Text };
             var json = JsonConvert.SerializeObject(payload);
             using var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            // Not: EmotionController route'unu kendi projene göre ayarla
             var resp = await client.PostAsync("api/emotion/analyze", content);
             var body = await resp.Content.ReadAsStringAsync();
 
@@ -53,7 +51,6 @@ namespace backend.Controllers
                 });
             }
 
-            // 2) Dönen yanıttan label/score çıkar
             string label;
             double score;
             try
@@ -70,7 +67,6 @@ namespace backend.Controllers
                 });
             }
 
-            // 3) Veritabanına kaydet
             var record = new EmotionRecord
             {
                 Username = req.Username,
@@ -82,8 +78,6 @@ namespace backend.Controllers
 
             _db.EmotionRecords.Add(record);
             await _db.SaveChangesAsync();
-
-            // 4) Sonucu döndür
             return Ok(new
             {
                 message = "Senkron analiz kaydedildi.",

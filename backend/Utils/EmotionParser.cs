@@ -11,11 +11,9 @@ namespace backend.Utils
 
             var s = raw.TrimStart();
 
-            // 1) Doğrudan JSON (obj/array)
             if (s.StartsWith("{") || s.StartsWith("["))
                 return ParseFromJson(s);
 
-            // 2) SSE ("event: ...", "data: ...")
             var lines = raw
                 .Split(new[] { "\r\n", "\n" }, StringSplitOptions.None)
                 .Select(l => l.Trim())
@@ -49,7 +47,6 @@ namespace backend.Utils
         {
             var token = JToken.Parse(json);
 
-            // A) data: [ { label, score, ... } ]
             if (token is JArray arr && arr.Count > 0)
             {
                 var item = arr[0];
@@ -58,10 +55,8 @@ namespace backend.Utils
                 return (label, score);
             }
 
-            // B) { data: [ [ { label, score } ] ] } gibi iç içe yapı
             if (token is JObject obj)
             {
-                // Top-level'da label/score varsa (ileride format değişirse) onu da destekleyelim
                 if (obj["label"] != null && obj["score"] != null)
                     return (obj["label"]!.ToString(), obj["score"]!.Value<double>());
 

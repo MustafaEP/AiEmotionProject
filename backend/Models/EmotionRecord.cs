@@ -14,7 +14,7 @@ namespace backend.Models
         public string Text { get; set; } 
 
         [Required]
-        public double Score { get; set; }  // 0.0 - 1.0 
+        public double Score { get; set; }
 
         [Required]
         public string Label { get; set; }

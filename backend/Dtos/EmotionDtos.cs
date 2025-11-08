@@ -1,4 +1,4 @@
-﻿namespace backend.NewFolder
+﻿namespace backend.Dtos
 {
     public class EmotionDtos
     {
