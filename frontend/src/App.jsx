@@ -176,7 +176,8 @@ function App() {
             📜 History
           </button>
         </div>
-        <p className="subtitle">Analyze the emotional tone of your text</p>
+          <p className="subtitle">Analyze the emotional tone of your text</p>
+          <p className="subtitle">Project is not working good in English texts. It is not a problem, it is just a limitation of the model. Model is trained on Turkish texts.</p>
 
         <form onSubmit={handleSubmit} className="form">
           <div className="form-group">
