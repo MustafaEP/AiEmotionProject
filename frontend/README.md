@@ -1,33 +1,33 @@
 # Frontend - AI Emotion Project
 
-Modern bir React web uygulaması ile metinlerinizin duygusal tonunu analiz edin.
+Analyze the emotional tone of your texts with a modern React web application.
 
-## 🌐 Canlı Link
+## 🌐 Live Link
 
-**Canlı Uygulama**: [https://ai-emotion-project-llej9t1cm-mustafa-erhans-projects.vercel.app](https://ai-emotion-project-llej9t1cm-mustafa-erhans-projects.vercel.app)
+**Live Application**: [https://ai-emotion-project-llej9t1cm-mustafa-erhans-projects.vercel.app](https://ai-emotion-project-llej9t1cm-mustafa-erhans-projects.vercel.app)
 
-Tarayıcıdan yukarıdaki linki açarak doğrudan kullanabilirsiniz.
+You can use it directly by opening the link above in your browser.
 
-## 🚀 Yerel Çalıştırma
+## 🚀 Local Setup
 
-### Gereksinimler
+### Requirements
 
 - Node.js 16+
-- npm veya yarn
+- npm or yarn
 
-### Kurulum
+### Installation
 
 ```bash
 npm install
 ```
 
-### Geliştirme
+### Development
 
 ```bash
 npm run dev
 ```
 
-Uygulama `http://localhost:5173` adresinde çalışacaktır.
+The application will run at `http://localhost:5173`.
 
 ### Production Build
 
@@ -35,7 +35,7 @@ Uygulama `http://localhost:5173` adresinde çalışacaktır.
 npm run build
 ```
 
-Build çıktısı `dist/` klasöründe oluşturulur.
+Build output is created in the `dist/` folder.
 
 ### Preview Production Build
 
@@ -43,59 +43,58 @@ Build çıktısı `dist/` klasöründe oluşturulur.
 npm run preview
 ```
 
-## 📦 Teknolojiler
+## 📦 Technologies
 
 - React 18
 - Vite
 - Modern CSS
 
-## ✨ Özellikler
+## ✨ Features
 
-- ✨ Modern ve kullanıcı dostu arayüz
-- 🎨 Gradient tasarım ve animasyonlar
-- 📊 Duygu analizi sonuçları (pozitif/negatif/nötr)
-- 📈 Skor gösterimi
-- 📜 Analiz geçmişi görüntüleme
-- 🔍 Filtreleme ve sayfalama
-- ⚡ Hızlı ve responsive tasarım
+- ✨ Modern and user-friendly interface
+- 🎨 Gradient design and animations
+- 📊 Emotion analysis results (positive/negative/neutral)
+- 📈 Score display
+- 📜 Analysis history viewing
+- 🔍 Filtering and pagination
+- ⚡ Fast and responsive design
 
-## 🎯 Kullanım
+## 🎯 Usage
 
-1. Kullanıcı adınızı girin
-2. Analiz etmek istediğiniz metni yazın
-3. "Analiz Et" butonuna tıklayın
-4. Sonuçları görüntüleyin
-5. "📜 Geçmiş" butonuna tıklayarak önceki analizleri görüntüleyin
+1. Enter your username
+2. Write the text you want to analyze
+3. Click the "Analyze" button
+4. View the results
+5. Click the "📜 History" button to view previous analyses
 
-## 🔧 Yapılandırma
+## 🔧 Configuration
 
 ### Environment Variables
 
-Uygulama `VITE_API_BASE_URL` environment variable'ını kullanır:
+The application uses the `VITE_API_BASE_URL` environment variable:
 
 ```bash
-# .env dosyası oluşturun
+# Create .env file
 VITE_API_BASE_URL=https://aiemotionproject.onrender.com
 ```
 
-Varsayılan değer: `https://aiemotionproject.onrender.com`
+Default value: `https://aiemotionproject.onrender.com`
 
 ## 📡 API
 
-Uygulama aşağıdaki endpoint'leri kullanmaktadır:
+The application uses the following endpoints:
 
-- `POST {VITE_API_BASE_URL}/api/SyncAnalyze` - Duygu analizi yap ve kaydet
-- `GET {VITE_API_BASE_URL}/api/EmotionRecords` - Analiz geçmişini getir
+- `POST {VITE_API_BASE_URL}/api/SyncAnalyze` - Perform emotion analysis and save
+- `GET {VITE_API_BASE_URL}/api/EmotionRecords` - Get analysis history
 
-## 🔒 Güvenlik Özellikleri
+## 🔒 Security Features
 
-- ✅ Error Boundary eklendi
-- ✅ Environment variable desteği
-- ✅ Hata yönetimi iyileştirildi
+- ✅ Error Boundary added
+- ✅ Environment variable support
+- ✅ Error handling improved
 
-## 📝 Son Değişiklikler
+## 📝 Recent Changes
 
-- Environment variable desteği eklendi (VITE_API_BASE_URL)
-- Error Boundary eklendi
-- Hata yönetimi iyileştirildi
-
+- Environment variable support added (VITE_API_BASE_URL)
+- Error Boundary added
+- Error handling improved

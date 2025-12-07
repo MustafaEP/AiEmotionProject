@@ -1,37 +1,37 @@
 # Backend API - AI Emotion Project
 
-.NET 8.0 tabanlı RESTful API servisi.
+.NET 8.0 based RESTful API service.
 
-## 🌐 Canlı Link
+## 🌐 Live Link
 
 **Swagger UI**: [https://aiemotionproject.onrender.com/swagger/index.html](https://aiemotionproject.onrender.com/swagger/index.html)
 
-Tarayıcıdan yukarıdaki linki açarak API dokümantasyonunu görüntüleyebilir ve test edebilirsiniz.
+You can view and test the API documentation by opening the link above in your browser.
 
-## 🚀 Yerel Çalıştırma
+## 🚀 Local Setup
 
-### Gereksinimler
+### Requirements
 
 - .NET 8.0 SDK
-- SQLite (otomatik oluşturulur)
+- SQLite (automatically created)
 
-### Kurulum
+### Installation
 
 ```bash
 dotnet restore
 ```
 
-### Veritabanı Migration
+### Database Migration
 
-Migration'lar uygulama başlatıldığında otomatik olarak çalıştırılır.
+Migrations are automatically run when the application starts.
 
-### Çalıştırma
+### Running
 
 ```bash
 dotnet run
 ```
 
-API `http://localhost:5000` (veya `https://localhost:5001`) adresinde çalışacaktır.
+The API will run at `http://localhost:5000` (or `https://localhost:5001`).
 
 Swagger UI: `http://localhost:5000/swagger`
 
@@ -39,35 +39,35 @@ Swagger UI: `http://localhost:5000/swagger`
 
 ### Health Check
 
-- `GET /health` - Sistem sağlık kontrolü
+- `GET /health` - System health check
 
 ### Emotion Analysis
 
-- `POST /api/emotion/analyze` - Metin duygu analizi
-- `POST /api/SyncAnalyze` - Senkron analiz ve kayıt
+- `POST /api/emotion/analyze` - Text emotion analysis
+- `POST /api/SyncAnalyze` - Synchronous analysis and save
 
 ### Emotion Records
 
-- `GET /api/EmotionRecords` - Tüm kayıtları listele (filtreleme ve sayfalama destekler)
-- `GET /api/EmotionRecords/{id}` - Tek kayıt getir
-- `DELETE /api/EmotionRecords/{id}` - Kayıt sil
+- `GET /api/EmotionRecords` - List all records (supports filtering and pagination)
+- `GET /api/EmotionRecords/{id}` - Get single record
+- `DELETE /api/EmotionRecords/{id}` - Delete record
 
 ### Query Parameters (GET /api/EmotionRecords)
 
-- `username` - Kullanıcı adına göre filtrele
-- `label` - Duygu etiketine göre filtrele (positive/negative/neutral)
-- `fromUtc` - Başlangıç tarihi
-- `toUtc` - Bitiş tarihi
-- `page` - Sayfa numarası (varsayılan: 1)
-- `pageSize` - Sayfa boyutu (varsayılan: 20, maksimum: 100)
+- `username` - Filter by username
+- `label` - Filter by emotion label (positive/negative/neutral)
+- `fromUtc` - Start date
+- `toUtc` - End date
+- `page` - Page number (default: 1)
+- `pageSize` - Page size (default: 20, maximum: 100)
 
-## 🔧 Yapılandırma
+## 🔧 Configuration
 
 ### Environment Variables
 
-- `SELF_BASE_URL` - Kendi API base URL'i (varsayılan: `https://aiemotionproject.onrender.com/`)
-- `EMOTION_SERVICE_BASE_URL` - AI servis base URL'i (varsayılan: `https://mustafaep-emotion-analyzer.hf.space`)
-- `PORT` - Dinlenecek port (Render için otomatik)
+- `SELF_BASE_URL` - Own API base URL (default: `https://aiemotionproject.onrender.com/`)
+- `EMOTION_SERVICE_BASE_URL` - AI service base URL (default: `https://mustafaep-emotion-analyzer.hf.space`)
+- `PORT` - Port to listen on (automatic for Render)
 
 ### appsettings.json
 
@@ -89,13 +89,13 @@ Swagger UI: `http://localhost:5000/swagger`
 }
 ```
 
-## 🗄️ Veritabanı
+## 🗄️ Database
 
-SQLite veritabanı kullanılır:
-- Development: `emotiondata.db` (proje dizininde)
+SQLite database is used:
+- Development: `emotiondata.db` (in project directory)
 - Production: `/var/data/emotiondata.db` (Render Persistent Disk)
 
-## 📦 Teknolojiler
+## 📦 Technologies
 
 - .NET 8.0
 - Entity Framework Core
@@ -103,10 +103,10 @@ SQLite veritabanı kullanılır:
 - Swagger/OpenAPI
 - HttpClient Factory
 
-## 🔒 Güvenlik Özellikleri
+## 🔒 Security Features
 
-- ✅ CORS policy (Production'da spesifik origin'ler)
-- ✅ Swagger sadece Development modunda aktif
+- ✅ CORS policy (Specific origins in production)
+- ✅ Swagger only active in Development mode
 - ✅ Input validation (Data Annotations)
 - ✅ Error handling middleware
 - ✅ Structured logging
@@ -119,16 +119,15 @@ docker build -t ai-emotion-backend .
 docker run -p 5000:5000 ai-emotion-backend
 ```
 
-## 📝 Son Değişiklikler
+## 📝 Recent Changes
 
-- Input validation eklendi (Data Annotations)
-- CORS policy production için kısıtlandı
-- Swagger sadece development modunda aktif
-- Error handling middleware eklendi
-- Health check endpoint eklendi
-- Hardcoded URL'ler configuration'a taşındı
-- Retry mekanizması exponential backoff ile iyileştirildi
-- Logging yapılandırması eklendi
-- Model'lere max length constraint'leri eklendi
-- Database index'leri eklendi
-
+- Input validation added (Data Annotations)
+- CORS policy restricted for production
+- Swagger only active in development mode
+- Error handling middleware added
+- Health check endpoint added
+- Hardcoded URLs moved to configuration
+- Retry mechanism improved with exponential backoff
+- Logging configuration added
+- Max length constraints added to models
+- Database indexes added

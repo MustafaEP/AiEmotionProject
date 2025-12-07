@@ -21,13 +21,13 @@ namespace backend.HealthChecks
                 var canConnect = await _dbContext.Database.CanConnectAsync(cancellationToken);
                 if (canConnect)
                 {
-                    return HealthCheckResult.Healthy("Database bağlantısı başarılı.");
+                    return HealthCheckResult.Healthy("Database connection successful.");
                 }
-                return HealthCheckResult.Unhealthy("Database bağlantısı başarısız.");
+                return HealthCheckResult.Unhealthy("Database connection failed.");
             }
             catch (Exception ex)
             {
-                return HealthCheckResult.Unhealthy("Database kontrolü sırasında hata oluştu.", ex);
+                return HealthCheckResult.Unhealthy("An error occurred during database check.", ex);
             }
         }
     }

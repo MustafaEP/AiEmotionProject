@@ -30,7 +30,7 @@ namespace backend.Controllers
 
                 return StatusCode(500, new
                 {
-                    error = "Bir hata oluştu.",
+                    error = "An error occurred.",
                     message = exception.Message,
                     detail = HttpContext.RequestServices.GetService<IHostEnvironment>()?.IsDevelopment() == true
                         ? exception.ToString()
@@ -38,7 +38,7 @@ namespace backend.Controllers
                 });
             }
 
-            return StatusCode(500, new { error = "Bilinmeyen bir hata oluştu." });
+            return StatusCode(500, new { error = "An unknown error occurred." });
         }
     }
 }

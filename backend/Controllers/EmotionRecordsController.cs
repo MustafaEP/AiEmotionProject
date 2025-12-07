@@ -33,12 +33,12 @@ namespace backend.Controllers
             
             if (!string.IsNullOrWhiteSpace(username) && username.Length > 100)
             {
-                return BadRequest(new { error = "Username en fazla 100 karakter olabilir." });
+                return BadRequest(new { error = "Username cannot exceed 100 characters." });
             }
             
             if (!string.IsNullOrWhiteSpace(label) && label.Length > 50)
             {
-                return BadRequest(new { error = "Label en fazla 50 karakter olabilir." });
+                return BadRequest(new { error = "Label cannot exceed 50 characters." });
             }
 
             var q = _db.EmotionRecords.AsQueryable();
@@ -75,8 +75,8 @@ namespace backend.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Kayıtlar getirilirken hata. Filters: Username={Username}, Label={Label}", username, label);
-                return StatusCode(500, new { error = "Bir hata oluştu." });
+                _logger.LogError(ex, "Error retrieving records. Filters: Username={Username}, Label={Label}", username, label);
+                return StatusCode(500, new { error = "An error occurred." });
             }
         }
 
@@ -88,15 +88,15 @@ namespace backend.Controllers
                 var rec = await _db.EmotionRecords.FindAsync(id);
                 if (rec is null)
                 {
-                    _logger.LogWarning("Kayıt bulunamadı. Id: {Id}", id);
-                    return NotFound(new { error = "Kayıt bulunamadı." });
+                    _logger.LogWarning("Record not found. Id: {Id}", id);
+                    return NotFound(new { error = "Record not found." });
                 }
                 return Ok(rec);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Kayıt getirilirken hata. Id: {Id}", id);
-                return StatusCode(500, new { error = "Bir hata oluştu." });
+                _logger.LogError(ex, "Error retrieving record. Id: {Id}", id);
+                return StatusCode(500, new { error = "An error occurred." });
             }
         }
 
@@ -111,7 +111,7 @@ namespace backend.Controllers
             [MaxLength(50)]
             public string? Label { get; set; }
             
-            [Range(0.0, 1.0, ErrorMessage = "Score 0.0 ile 1.0 arasında olmalıdır.")]
+            [Range(0.0, 1.0, ErrorMessage = "Score must be between 0.0 and 1.0.")]
             public double? Score { get; set; }
         }
 
@@ -123,20 +123,20 @@ namespace backend.Controllers
                 var rec = await _db.EmotionRecords.FindAsync(id);
                 if (rec is null)
                 {
-                    _logger.LogWarning("Silinecek kayıt bulunamadı. Id: {Id}", id);
-                    return NotFound(new { error = "Kayıt bulunamadı." });
+                    _logger.LogWarning("Record to delete not found. Id: {Id}", id);
+                    return NotFound(new { error = "Record not found." });
                 }
 
                 _db.EmotionRecords.Remove(rec);
                 await _db.SaveChangesAsync();
                 
-                _logger.LogInformation("Kayıt silindi. Id: {Id}", id);
+                _logger.LogInformation("Record deleted. Id: {Id}", id);
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Kayıt silinirken hata. Id: {Id}", id);
-                return StatusCode(500, new { error = "Bir hata oluştu." });
+                _logger.LogError(ex, "Error deleting record. Id: {Id}", id);
+                return StatusCode(500, new { error = "An error occurred." });
             }
         }
     }

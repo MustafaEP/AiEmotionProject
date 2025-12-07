@@ -21,8 +21,8 @@ class ErrorBoundary extends Component {
           <div className="card">
             <div className="error-message">
               <span className="error-icon">⚠️</span>
-              <h2>Bir hata oluştu</h2>
-              <p>Uygulamada beklenmeyen bir hata meydana geldi.</p>
+              <h2>An error occurred</h2>
+              <p>An unexpected error occurred in the application.</p>
               <button
                 onClick={() => {
                   this.setState({ hasError: false, error: null })
@@ -31,7 +31,7 @@ class ErrorBoundary extends Component {
                 className="submit-button"
                 style={{ marginTop: '1rem' }}
               >
-                Sayfayı Yenile
+                Reload Page
               </button>
             </div>
           </div>

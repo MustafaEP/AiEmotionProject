@@ -19,9 +19,9 @@ namespace backend.Controllers
 
         public class AnalyzeRequest
         {
-            [Required(ErrorMessage = "Text alanı zorunludur.")]
-            [MinLength(1, ErrorMessage = "Text en az 1 karakter olmalıdır.")]
-            [MaxLength(5000, ErrorMessage = "Text en fazla 5000 karakter olabilir.")]
+            [Required(ErrorMessage = "Text field is required.")]
+            [MinLength(1, ErrorMessage = "Text must be at least 1 character.")]
+            [MaxLength(5000, ErrorMessage = "Text cannot exceed 5000 characters.")]
             public string Text { get; set; } = string.Empty;
         }
 
@@ -37,7 +37,7 @@ namespace backend.Controllers
             {
                 if (string.IsNullOrWhiteSpace(req.Text))
                 {
-                    return BadRequest(new { error = "Text alanı boş olamaz." });
+                    return BadRequest(new { error = "Text field cannot be empty." });
                 }
 
                 var resultJson = await _service.AnalyzeAsync(req.Text, ct);
@@ -45,8 +45,8 @@ namespace backend.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Analiz sırasında hata oluştu.");
-                return StatusCode(500, new { error = "Analiz sırasında bir hata oluştu." });
+                _logger.LogError(ex, "An error occurred during analysis.");
+                return StatusCode(500, new { error = "An error occurred during analysis." });
             }
         }
     }

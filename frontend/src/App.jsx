@@ -38,7 +38,7 @@ function App() {
     e.preventDefault()
     
     if (!formData.username.trim() || !formData.text.trim()) {
-      setError('Lütfen kullanıcı adı ve metin alanlarını doldurun.')
+      setError('Please fill in both username and text fields.')
       return
     }
 
@@ -66,7 +66,7 @@ function App() {
       const data = await response.json()
       setResult(data)
     } catch (err) {
-      setError(err.message || 'Bir hata oluştu. Lütfen tekrar deneyin.')
+      setError(err.message || 'An error occurred. Please try again.')
       console.error('API Error:', err)
     } finally {
       setLoading(false)
@@ -89,13 +89,13 @@ function App() {
   const getLabelText = (label) => {
     switch (label?.toLowerCase()) {
       case 'positive':
-        return 'Pozitif'
+        return 'Positive'
       case 'negative':
-        return 'Negatif'
+        return 'Negative'
       case 'neutral':
-        return 'Nötr'
+        return 'Neutral'
       default:
-        return label || 'Bilinmiyor'
+        return label || 'Unknown'
     }
   }
 
@@ -123,7 +123,7 @@ function App() {
       const data = await response.json()
       setHistoryData(data)
     } catch (err) {
-      setHistoryError(err.message || 'Geçmiş kayıtlar yüklenirken bir hata oluştu.')
+      setHistoryError(err.message || 'An error occurred while loading history records.')
       console.error('History API Error:', err)
     } finally {
       setHistoryLoading(false)
@@ -167,40 +167,40 @@ function App() {
     <div className="app-container">
       <div className="card">
         <div className="header-actions">
-          <h1 className="title">Duygu Analizi</h1>
+          <h1 className="title">Emotion Analysis</h1>
           <button
             type="button"
             onClick={handleOpenHistory}
             className="history-button"
           >
-            📜 Geçmiş
+            📜 History
           </button>
         </div>
-        <p className="subtitle">Metninizin duygusal tonunu analiz edin</p>
+        <p className="subtitle">Analyze the emotional tone of your text</p>
 
         <form onSubmit={handleSubmit} className="form">
           <div className="form-group">
-            <label htmlFor="username">Kullanıcı Adı</label>
+            <label htmlFor="username">Username</label>
             <input
               type="text"
               id="username"
               name="username"
               value={formData.username}
               onChange={handleChange}
-              placeholder="Kullanıcı adınızı girin"
+              placeholder="Enter your username"
               disabled={loading}
               className="input"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="text">Analiz Edilecek Metin</label>
+            <label htmlFor="text">Text to Analyze</label>
             <textarea
               id="text"
               name="text"
               value={formData.text}
               onChange={handleChange}
-              placeholder="Analiz etmek istediğiniz metni buraya yazın..."
+              placeholder="Enter the text you want to analyze here..."
               disabled={loading}
               rows="5"
               className="textarea"
@@ -212,7 +212,7 @@ function App() {
             disabled={loading}
             className="submit-button"
           >
-            {loading ? 'Analiz Ediliyor...' : 'Analiz Et'}
+            {loading ? 'Analyzing...' : 'Analyze'}
           </button>
         </form>
 
@@ -225,26 +225,26 @@ function App() {
 
         {result && (
           <div className="result-card">
-            <h2 className="result-title">Analiz Sonucu</h2>
+            <h2 className="result-title">Analysis Result</h2>
             
             <div className="result-item">
-              <span className="result-label">Mesaj:</span>
+              <span className="result-label">Message:</span>
               <span className="result-value">{result.message}</span>
             </div>
 
             <div className="result-item">
-              <span className="result-label">Kullanıcı:</span>
+              <span className="result-label">User:</span>
               <span className="result-value">{result.username}</span>
             </div>
 
             <div className="result-item">
-              <span className="result-label">Metin:</span>
+              <span className="result-label">Text:</span>
               <span className="result-value text-preview">{result.text}</span>
             </div>
 
             <div className="result-row">
               <div className="result-item">
-                <span className="result-label">Duygu:</span>
+                <span className="result-label">Emotion:</span>
                 <span
                   className="result-badge"
                   style={{ backgroundColor: getLabelColor(result.label) }}
@@ -254,7 +254,7 @@ function App() {
               </div>
 
               <div className="result-item">
-                <span className="result-label">Skor:</span>
+                <span className="result-label">Score:</span>
                 <span className="result-value score">
                   {(result.score * 100).toFixed(2)}%
                 </span>
@@ -263,9 +263,9 @@ function App() {
 
             {result.createdAt && (
               <div className="result-item">
-                <span className="result-label">Tarih:</span>
+                <span className="result-label">Date:</span>
                 <span className="result-value">
-                  {new Date(result.createdAt).toLocaleString('tr-TR')}
+                  {new Date(result.createdAt).toLocaleString('en-US')}
                 </span>
               </div>
             )}
@@ -278,7 +278,7 @@ function App() {
         <div className="modal-overlay" onClick={handleCloseHistory}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h2 className="modal-title">Geçmiş Analizler</h2>
+              <h2 className="modal-title">Analysis History</h2>
               <button
                 type="button"
                 onClick={handleCloseHistory}
@@ -290,7 +290,7 @@ function App() {
 
             <div className="modal-filters">
               <div className="filter-group">
-                <label htmlFor="filter-label">Duygu</label>
+                <label htmlFor="filter-label">Emotion</label>
                 <select
                   id="filter-label"
                   name="label"
@@ -298,10 +298,10 @@ function App() {
                   onChange={handleHistoryFilterChange}
                   className="filter-input"
                 >
-                  <option value="">Tümü</option>
-                  <option value="positive">Pozitif</option>
-                  <option value="negative">Negatif</option>
-                  <option value="neutral">Nötr</option>
+                  <option value="">All</option>
+                  <option value="positive">Positive</option>
+                  <option value="negative">Negative</option>
+                  <option value="neutral">Neutral</option>
                 </select>
               </div>
               <button
@@ -310,14 +310,14 @@ function App() {
                 className="filter-button"
                 disabled={historyLoading}
               >
-                {historyLoading ? 'Yükleniyor...' : 'Filtrele'}
+                {historyLoading ? 'Loading...' : 'Filter'}
               </button>
             </div>
 
             <div className="modal-body">
               {historyLoading && (
                 <div className="loading-overlay">
-                  <div className="loading-message">Yükleniyor...</div>
+                  <div className="loading-message">Loading...</div>
                 </div>
               )}
 
@@ -331,9 +331,9 @@ function App() {
               {historyData && (
                 <>
                   <div className="history-info">
-                    <span>Toplam: {historyData.total} kayıt</span>
+                    <span>Total: {historyData.total} records</span>
                     <span>
-                      Sayfa {historyData.page} / {Math.ceil(historyData.total / historyData.pageSize)}
+                      Page {historyData.page} / {Math.ceil(historyData.total / historyData.pageSize)}
                     </span>
                   </div>
 
@@ -353,17 +353,17 @@ function App() {
                           <div className="history-text">{item.text}</div>
                           <div className="history-item-footer">
                             <span className="history-score">
-                              Skor: {(item.score * 100).toFixed(2)}%
+                              Score: {(item.score * 100).toFixed(2)}%
                             </span>
                             <span className="history-date">
-                              {new Date(item.createdAt).toLocaleString('tr-TR')}
+                              {new Date(item.createdAt).toLocaleString('en-US')}
                             </span>
                           </div>
                         </div>
                       ))}
                     </div>
                   ) : !historyLoading ? (
-                    <div className="empty-message">Kayıt bulunamadı.</div>
+                    <div className="empty-message">No records found.</div>
                   ) : null}
 
                   {historyData.total > historyData.pageSize && (
@@ -374,10 +374,10 @@ function App() {
                         disabled={historyFilters.page <= 1 || historyLoading}
                         className="pagination-button"
                       >
-                        ← Önceki
+                        ← Previous
                       </button>
                       <span className="pagination-info">
-                        Sayfa {historyFilters.page} / {Math.ceil(historyData.total / historyData.pageSize)}
+                        Page {historyFilters.page} / {Math.ceil(historyData.total / historyData.pageSize)}
                       </span>
                       <button
                         type="button"
@@ -385,7 +385,7 @@ function App() {
                         disabled={historyFilters.page >= Math.ceil(historyData.total / historyData.pageSize) || historyLoading}
                         className="pagination-button"
                       >
-                        Sonraki →
+                        Next →
                       </button>
                     </div>
                   )}

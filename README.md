@@ -1,24 +1,24 @@
 # AI Emotion Project
 
-AI tabanlı duygu analizi projesi. Bu proje, metinlerin duygusal tonunu analiz eden bir full-stack uygulamadır.
+AI-based emotion analysis project. This project is a full-stack application that analyzes the emotional tone of texts.
 
-## 🌐 Canlı Linkler
+## 🌐 Live Links
 
 - **Frontend**: [https://ai-emotion-project-llej9t1cm-mustafa-erhans-projects.vercel.app](https://ai-emotion-project-llej9t1cm-mustafa-erhans-projects.vercel.app)
 - **Backend API (Swagger)**: [https://aiemotionproject.onrender.com/swagger/index.html](https://aiemotionproject.onrender.com/swagger/index.html)
 - **AI Service (Hugging Face)**: [https://huggingface.co/spaces/mustafaep/emotion-analyzer](https://huggingface.co/spaces/mustafaep/emotion-analyzer)
 
-## 📁 Proje Yapısı
+## 📁 Project Structure
 
 ```
 AiEmotionProject/
-├── ai-service/          # Python Gradio AI servisi (Hugging Face)
+├── ai-service/          # Python Gradio AI service (Hugging Face)
 ├── backend/             # .NET 8.0 Web API
-├── frontend/            # React + Vite web uygulaması
-└── mobile/              # React Native mobil uygulama
+├── frontend/            # React + Vite web application
+└── mobile/              # React Native mobile application
 ```
 
-## 🚀 Hızlı Başlangıç
+## 🚀 Quick Start
 
 ### AI Service (Python)
 
@@ -28,7 +28,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-Detaylı bilgi için: [ai-service/README.md](ai-service/README.md)
+For detailed information: [ai-service/README.md](ai-service/README.md)
 
 ### Backend (.NET)
 
@@ -38,9 +38,9 @@ dotnet restore
 dotnet run
 ```
 
-API `http://localhost:5000` adresinde çalışacaktır. Swagger UI: `http://localhost:5000/swagger`
+The API will run at `http://localhost:5000`. Swagger UI: `http://localhost:5000/swagger`
 
-Detaylı bilgi için: [backend/README.md](backend/README.md)
+For detailed information: [backend/README.md](backend/README.md)
 
 ### Frontend (React)
 
@@ -50,9 +50,9 @@ npm install
 npm run dev
 ```
 
-Uygulama `http://localhost:5173` adresinde çalışacaktır.
+The application will run at `http://localhost:5173`.
 
-Detaylı bilgi için: [frontend/README.md](frontend/README.md)
+For detailed information: [frontend/README.md](frontend/README.md)
 
 ### Mobile (React Native)
 
@@ -62,23 +62,23 @@ npm install
 npm start
 ```
 
-Detaylı bilgi için: [mobile/mobile/README.md](mobile/mobile/README.md)
+For detailed information: [mobile/mobile/README.md](mobile/mobile/README.md)
 
-## 🛠️ Teknolojiler
+## 🛠️ Technologies
 
 - **AI Service**: Python, Gradio, Transformers, Hugging Face
 - **Backend**: .NET 8.0, Entity Framework Core, SQLite
 - **Frontend**: React, Vite
 - **Mobile**: React Native
 
-## 📝 Özellikler
+## 📝 Features
 
-- Metin duygu analizi (pozitif/negatif/nötr)
-- Kullanıcı bazlı analiz geçmişi
+- Text emotion analysis (positive/negative/neutral)
+- User-based analysis history
 - RESTful API
-- Swagger dokümantasyonu
-- Modern ve responsive web arayüzü
+- Swagger documentation
+- Modern and responsive web interface
 
-## 📄 Lisans
+## 📄 License
 
-Bu proje eğitim amaçlıdır.
+This project is for educational purposes.

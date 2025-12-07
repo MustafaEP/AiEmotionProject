@@ -20,7 +20,7 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "AI Emotion API",
         Version = "v1",
-        Description = "AI tabanlı duygu analizi API'si"
+        Description = "AI-based emotion analysis API"
     });
 });
 
@@ -37,7 +37,7 @@ var selfBaseUrl = Environment.GetEnvironmentVariable("SELF_BASE_URL")
                   ?? "https://aiemotionproject.onrender.com/";
 builder.Services.AddHttpClient("SelfApi", c => c.BaseAddress = new Uri(selfBaseUrl));
 
-// CORS - Production'da spesifik origin'ler
+// CORS - Specific origins in production
 var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
     ?? new[] { "https://ai-emotion-project-llej9t1cm-mustafa-erhans-projects.vercel.app" };
 
@@ -124,7 +124,7 @@ using (var scope = app.Services.CreateScope())
     catch (Exception ex)
     {
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "Migration sırasında hata oluştu.");
+        logger.LogError(ex, "An error occurred during migration.");
     }
 }
 

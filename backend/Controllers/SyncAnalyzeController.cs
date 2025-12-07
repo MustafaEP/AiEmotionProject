@@ -28,14 +28,14 @@ namespace backend.Controllers
 
         public class SyncAnalyzeRequest
         {
-            [Required(ErrorMessage = "Username zorunludur.")]
-            [MinLength(1, ErrorMessage = "Username en az 1 karakter olmalıdır.")]
-            [MaxLength(100, ErrorMessage = "Username en fazla 100 karakter olabilir.")]
+            [Required(ErrorMessage = "Username is required.")]
+            [MinLength(1, ErrorMessage = "Username must be at least 1 character.")]
+            [MaxLength(100, ErrorMessage = "Username cannot exceed 100 characters.")]
             public string Username { get; set; } = string.Empty;
 
-            [Required(ErrorMessage = "Text zorunludur.")]
-            [MinLength(1, ErrorMessage = "Text en az 1 karakter olmalıdır.")]
-            [MaxLength(5000, ErrorMessage = "Text en fazla 5000 karakter olabilir.")]
+            [Required(ErrorMessage = "Text is required.")]
+            [MinLength(1, ErrorMessage = "Text must be at least 1 character.")]
+            [MaxLength(5000, ErrorMessage = "Text cannot exceed 5000 characters.")]
             public string Text { get; set; } = string.Empty;
         }
 
@@ -48,7 +48,7 @@ namespace backend.Controllers
             }
 
             if (string.IsNullOrWhiteSpace(req?.Username) || string.IsNullOrWhiteSpace(req?.Text))
-                return BadRequest("username ve text zorunludur.");
+                return BadRequest("username and text are required.");
 
             var client = _httpFactory.CreateClient("SelfApi");
 
@@ -63,11 +63,11 @@ namespace backend.Controllers
 
                 if (!resp.IsSuccessStatusCode)
                 {
-                    _logger.LogWarning("EmotionController yanıtı başarısız. Status: {Status}, Username: {Username}", 
+                    _logger.LogWarning("EmotionController response failed. Status: {Status}, Username: {Username}", 
                         resp.StatusCode, req.Username);
                     return StatusCode((int)resp.StatusCode, new
                     {
-                        error = "EmotionController yanıtı başarısız.",
+                        error = "EmotionController response failed.",
                         status = resp.StatusCode.ToString(),
                         preview = body?.Length > 200 ? body[..200] : body
                     });
@@ -81,10 +81,10 @@ namespace backend.Controllers
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Yanıt ayrıştırılamadı. Username: {Username}", req.Username);
+                    _logger.LogError(ex, "Failed to parse response. Username: {Username}", req.Username);
                     return BadRequest(new
                     {
-                        error = "Yanıt ayrıştırılamadı.",
+                        error = "Failed to parse response.",
                         detail = ex.Message,
                         preview = body?.Length > 200 ? body[..200] : body
                     });
@@ -102,12 +102,12 @@ namespace backend.Controllers
                 _db.EmotionRecords.Add(record);
                 await _db.SaveChangesAsync();
                 
-                _logger.LogInformation("Senkron analiz kaydedildi. Username: {Username}, Label: {Label}, Score: {Score}", 
+                _logger.LogInformation("Synchronous analysis saved. Username: {Username}, Label: {Label}, Score: {Score}", 
                     record.Username, record.Label, record.Score);
                 
                 return Ok(new
                 {
-                    message = "Senkron analiz kaydedildi.",
+                    message = "Synchronous analysis saved.",
                     username = record.Username,
                     text = record.Text,
                     label = record.Label,
@@ -117,13 +117,13 @@ namespace backend.Controllers
             }
             catch (HttpRequestException ex)
             {
-                _logger.LogError(ex, "HTTP isteği başarısız. Username: {Username}", req.Username);
-                return StatusCode(503, new { error = "Dış servise bağlanılamadı." });
+                _logger.LogError(ex, "HTTP request failed. Username: {Username}", req.Username);
+                return StatusCode(503, new { error = "Could not connect to external service." });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Beklenmeyen hata. Username: {Username}", req.Username);
-                return StatusCode(500, new { error = "Bir hata oluştu." });
+                _logger.LogError(ex, "Unexpected error. Username: {Username}", req.Username);
+                return StatusCode(500, new { error = "An error occurred." });
             }
         }
     }

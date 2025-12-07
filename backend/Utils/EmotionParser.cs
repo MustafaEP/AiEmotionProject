@@ -13,7 +13,7 @@ namespace backend.Utils
         public static (string label, double score) ParseLabelScore(string raw)
         {
             if (string.IsNullOrWhiteSpace(raw))
-                throw new EmotionParserException("Boş yanıt.");
+                throw new EmotionParserException("Empty response.");
 
             var s = raw.TrimStart();
 
@@ -43,7 +43,7 @@ namespace backend.Utils
             }
             dataLine ??= lines.FirstOrDefault(l => l.StartsWith("data:", StringComparison.OrdinalIgnoreCase));
             if (string.IsNullOrWhiteSpace(dataLine))
-                throw new EmotionParserException("SSE içinde 'data:' satırı bulunamadı.");
+                throw new EmotionParserException("'data:' line not found in SSE.");
 
             var jsonPart = dataLine["data:".Length..].Trim();
             return ParseFromJson(jsonPart);
@@ -53,7 +53,7 @@ namespace backend.Utils
         {
             if (string.IsNullOrWhiteSpace(json))
             {
-                throw new EmotionParserException("JSON içeriği boş.");
+                throw new EmotionParserException("JSON content is empty.");
             }
 
             try
@@ -87,11 +87,11 @@ namespace backend.Utils
                     }
                 }
 
-                throw new EmotionParserException("Beklenmeyen JSON/SSE formatı.");
+                throw new EmotionParserException("Unexpected JSON/SSE format.");
             }
             catch (Newtonsoft.Json.JsonException ex)
             {
-                throw new EmotionParserException("JSON parse hatası.", ex);
+                throw new EmotionParserException("JSON parse error.", ex);
             }
         }
     }

@@ -40,7 +40,7 @@ namespace backend.Services
         {
             if (string.IsNullOrWhiteSpace(text))
             {
-                throw new ArgumentException("Text boş olamaz.", nameof(text));
+                throw new ArgumentException("Text cannot be empty.", nameof(text));
             }
 
             var postUrl = $"{_baseUrl}/gradio_api/call/analyze";
@@ -58,8 +58,8 @@ namespace backend.Services
                 
                 if (string.IsNullOrWhiteSpace(evt?.event_id))
                 {
-                    _logger.LogError("event_id boş döndü. Response: {Response}", postBody);
-                    throw new InvalidOperationException("event_id boş döndü.");
+                    _logger.LogError("event_id returned empty. Response: {Response}", postBody);
+                    throw new InvalidOperationException("event_id returned empty.");
                 }
 
                 _cache.Set($"emotion:event:{evt.event_id}", text, TimeSpan.FromMinutes(5));
@@ -76,11 +76,11 @@ namespace backend.Services
                         if (getResp.IsSuccessStatusCode)
                         {
                             var getBody = await getResp.Content.ReadAsStringAsync(ct);
-                            _logger.LogInformation("Analiz başarılı. event_id: {EventId}, attempt: {Attempt}", evt.event_id, attempt);
+                            _logger.LogInformation("Analysis successful. event_id: {EventId}, attempt: {Attempt}", evt.event_id, attempt);
                             return getBody;
                         }
 
-                        _logger.LogWarning("Analiz sonucu alınamadı. Status: {Status}, attempt: {Attempt}/{MaxRetries}", 
+                        _logger.LogWarning("Could not retrieve analysis result. Status: {Status}, attempt: {Attempt}/{MaxRetries}", 
                             getResp.StatusCode, attempt, _maxRetries);
 
                         if (attempt < _maxRetries)
@@ -91,22 +91,22 @@ namespace backend.Services
                     }
                     catch (Exception ex) when (attempt < _maxRetries)
                     {
-                        _logger.LogWarning(ex, "Analiz sonucu alınırken hata. attempt: {Attempt}/{MaxRetries}", attempt, _maxRetries);
+                        _logger.LogWarning(ex, "Error retrieving analysis result. attempt: {Attempt}/{MaxRetries}", attempt, _maxRetries);
                         var delay = TimeSpan.FromMilliseconds(_retryDelayMs * Math.Pow(2, attempt - 1));
                         await Task.Delay(delay, ct);
                     }
                 }
 
-                throw new TimeoutException($"Analiz sonucu alınamadı. event_id: {evt.event_id}, max retries: {_maxRetries}");
+                throw new TimeoutException($"Could not retrieve analysis result. event_id: {evt.event_id}, max retries: {_maxRetries}");
             }
             catch (HttpRequestException ex)
             {
-                _logger.LogError(ex, "HTTP isteği başarısız. URL: {Url}", postUrl);
+                _logger.LogError(ex, "HTTP request failed. URL: {Url}", postUrl);
                 throw;
             }
             catch (JsonException ex)
             {
-                _logger.LogError(ex, "JSON deserialization hatası.");
+                _logger.LogError(ex, "JSON deserialization error.");
                 throw;
             }
         }
