@@ -113,19 +113,33 @@ app.MapHealthChecks("/health");
 
 app.MapControllers();
 
-// EF Migrations - Auto apply
-using (var scope = app.Services.CreateScope())
+// EF Migrations - Auto apply (critical, fail if migration fails)
+try
 {
-    try
-    {
-        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        db.Database.Migrate();
-    }
-    catch (Exception ex)
+    using (var scope = app.Services.CreateScope())
     {
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred during migration.");
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        
+        logger.LogInformation("Checking database connection...");
+        var canConnect = db.Database.CanConnect();
+        
+        if (!canConnect)
+        {
+            logger.LogWarning("Cannot connect to database. Attempting to create database...");
+            db.Database.EnsureCreated();
+        }
+        
+        logger.LogInformation("Applying migrations...");
+        db.Database.Migrate();
+        logger.LogInformation("Migrations applied successfully.");
     }
+}
+catch (Exception ex)
+{
+    var logger = app.Services.GetRequiredService<ILogger<Program>>();
+    logger.LogCritical(ex, "CRITICAL: Failed to apply database migrations. Application cannot start.");
+    throw; // Fail fast - don't start the app without a working database
 }
 
 app.Run();
