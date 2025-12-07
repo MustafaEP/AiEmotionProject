@@ -28,7 +28,6 @@ namespace backend.Migrations
 
                     b.Property<string>("Label")
                         .IsRequired()
-                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<double>("Score")
@@ -36,21 +35,13 @@ namespace backend.Migrations
 
                     b.Property<string>("Text")
                         .IsRequired()
-                        .HasMaxLength(5000)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedAt");
-
-                    b.HasIndex("Label");
-
-                    b.HasIndex("Username");
 
                     b.ToTable("EmotionRecords");
                 });

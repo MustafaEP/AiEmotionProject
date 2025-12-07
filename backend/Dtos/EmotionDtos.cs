@@ -4,12 +4,12 @@
     {
         public class EmotionPostPayload
         {
-            public string[] data { get; set; } = Array.Empty<string>();
+            public string[] data { get; set; }
         }
 
         public class EventIdResponse
         {
-            public string event_id { get; set; } = string.Empty;
+            public string event_id { get; set; }
         }
     }
 }
