@@ -27,9 +27,9 @@ def analyze(text: str):
 
 with gr.Blocks() as demo:
     gr.Markdown("# Emotion Analyzer (TR/EN)")
-    inp = gr.Textbox(label="Metninizi yazın")
-    btn = gr.Button("Analiz Et")
-    out = gr.JSON(label="Sonuç")
+    inp = gr.Textbox(label="Write Your Text")
+    btn = gr.Button("Analyze")
+    out = gr.JSON(label="Result")
     btn.click(fn=analyze, inputs=inp, outputs=out)
 
 if __name__ == "__main__":
