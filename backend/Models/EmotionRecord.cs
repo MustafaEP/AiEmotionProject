@@ -8,16 +8,20 @@ namespace backend.Models
         public int Id { get; set; }
 
         [Required]
-        public string Username { get; set; }
+        [MaxLength(100)]
+        public string Username { get; set; } = string.Empty;
 
         [Required]
-        public string Text { get; set; } 
+        [MaxLength(5000)]
+        public string Text { get; set; } = string.Empty;
 
         [Required]
+        [Range(0.0, 1.0, ErrorMessage = "Score 0.0 ile 1.0 arasında olmalıdır.")]
         public double Score { get; set; }
 
         [Required]
-        public string Label { get; set; }
+        [MaxLength(50)]
+        public string Label { get; set; } = string.Empty;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }

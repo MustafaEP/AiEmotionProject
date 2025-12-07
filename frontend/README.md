@@ -67,10 +67,35 @@ npm run preview
 4. Sonuçları görüntüleyin
 5. "📜 Geçmiş" butonuna tıklayarak önceki analizleri görüntüleyin
 
+## 🔧 Yapılandırma
+
+### Environment Variables
+
+Uygulama `VITE_API_BASE_URL` environment variable'ını kullanır:
+
+```bash
+# .env dosyası oluşturun
+VITE_API_BASE_URL=https://aiemotionproject.onrender.com
+```
+
+Varsayılan değer: `https://aiemotionproject.onrender.com`
+
 ## 📡 API
 
 Uygulama aşağıdaki endpoint'leri kullanmaktadır:
 
-- `POST https://aiemotionproject.onrender.com/api/SyncAnalyze` - Duygu analizi yap ve kaydet
-- `GET https://aiemotionproject.onrender.com/api/EmotionRecords` - Analiz geçmişini getir
+- `POST {VITE_API_BASE_URL}/api/SyncAnalyze` - Duygu analizi yap ve kaydet
+- `GET {VITE_API_BASE_URL}/api/EmotionRecords` - Analiz geçmişini getir
+
+## 🔒 Güvenlik Özellikleri
+
+- ✅ Error Boundary eklendi
+- ✅ Environment variable desteği
+- ✅ Hata yönetimi iyileştirildi
+
+## 📝 Son Değişiklikler
+
+- Environment variable desteği eklendi (VITE_API_BASE_URL)
+- Error Boundary eklendi
+- Hata yönetimi iyileştirildi
 

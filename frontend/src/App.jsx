@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from 'react'
 import './App.css'
 
-const API_URL = 'https://aiemotionproject.onrender.com/api/SyncAnalyze'
-const HISTORY_API_URL = 'https://aiemotionproject.onrender.com/api/EmotionRecords'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://aiemotionproject.onrender.com'
+const API_URL = `${API_BASE_URL}/api/SyncAnalyze`
+const HISTORY_API_URL = `${API_BASE_URL}/api/EmotionRecords`
 
 function App() {
   const [formData, setFormData] = useState({

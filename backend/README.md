@@ -37,6 +37,10 @@ Swagger UI: `http://localhost:5000/swagger`
 
 ## 📡 API Endpoints
 
+### Health Check
+
+- `GET /health` - Sistem sağlık kontrolü
+
 ### Emotion Analysis
 
 - `POST /api/emotion/analyze` - Metin duygu analizi
@@ -62,6 +66,7 @@ Swagger UI: `http://localhost:5000/swagger`
 ### Environment Variables
 
 - `SELF_BASE_URL` - Kendi API base URL'i (varsayılan: `https://aiemotionproject.onrender.com/`)
+- `EMOTION_SERVICE_BASE_URL` - AI servis base URL'i (varsayılan: `https://mustafaep-emotion-analyzer.hf.space`)
 - `PORT` - Dinlenecek port (Render için otomatik)
 
 ### appsettings.json
@@ -70,6 +75,16 @@ Swagger UI: `http://localhost:5000/swagger`
 {
   "Self": {
     "BaseUrl": "https://aiemotionproject.onrender.com/"
+  },
+  "Cors": {
+    "AllowedOrigins": [
+      "https://ai-emotion-project-llej9t1cm-mustafa-erhans-projects.vercel.app"
+    ]
+  },
+  "EmotionService": {
+    "BaseUrl": "https://mustafaep-emotion-analyzer.hf.space",
+    "MaxRetries": 3,
+    "RetryDelayMs": 700
   }
 }
 ```
@@ -88,10 +103,32 @@ SQLite veritabanı kullanılır:
 - Swagger/OpenAPI
 - HttpClient Factory
 
+## 🔒 Güvenlik Özellikleri
+
+- ✅ CORS policy (Production'da spesifik origin'ler)
+- ✅ Swagger sadece Development modunda aktif
+- ✅ Input validation (Data Annotations)
+- ✅ Error handling middleware
+- ✅ Structured logging
+- ✅ Health check endpoint
+
 ## 🐳 Docker
 
 ```bash
 docker build -t ai-emotion-backend .
 docker run -p 5000:5000 ai-emotion-backend
 ```
+
+## 📝 Son Değişiklikler
+
+- Input validation eklendi (Data Annotations)
+- CORS policy production için kısıtlandı
+- Swagger sadece development modunda aktif
+- Error handling middleware eklendi
+- Health check endpoint eklendi
+- Hardcoded URL'ler configuration'a taşındı
+- Retry mekanizması exponential backoff ile iyileştirildi
+- Logging yapılandırması eklendi
+- Model'lere max length constraint'leri eklendi
+- Database index'leri eklendi
 
